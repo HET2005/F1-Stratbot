@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container text-center py-5">
+  <h2 class="mb-4 display-6 fw-bold text-uppercase">Driver Rankings - {{ year }}</h2>
+
+  <!-- Ranking Table -->
+  <div class="table-responsive">
+    <table class="table table-dark table-hover table-bordered align-middle shadow glass-table">
+      <thead class="table-danger text-uppercase">
+        <tr>
+          <th>Rank</th>
+          <th>Driver</th>
+          <th>Points</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for driver in ranking %}
+        <tr>
+          <th scope="row">{{ driver.rank }}</th>
+          <td>{{ driver.surname }}</td>
+          <td>{{ driver.points }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Chart.js Graph -->
+  <div class="mt-5">
+    <h5 class="text-uppercase mb-3">Points Comparison</h5>
+    <div style="max-width: 800px; margin: 0 auto;">
+      <canvas id="rankingChart" height="300"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const ctx = document.getElementById('rankingChart').getContext('2d');
+  const rankingChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: {{ names|tojson }},
+      datasets: [{
+        label: 'Position',
+        data: {{ scores|tojson }},
+        backgroundColor: 'rgba(220, 53, 69, 0.7)',
+        borderColor: 'rgba(220, 53, 69, 1)',
+        borderWidth: 2,
+        borderRadius: 5
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: { color: '#fff' },
+          grid: { color: 'rgba(255,255,255,0.1)' }
+        },
+        x: {
+          ticks: { color: '#fff' },
+          grid: { color: 'rgba(255,255,255,0.1)' }
+        }
+      },
+      plugins: {
+        legend: { labels: { color: '#fff' } }
+      }
+    }
+  });
+</script>
+
+{% endblock %}

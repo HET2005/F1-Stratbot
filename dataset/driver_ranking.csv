@@ -1,0 +1,21 @@
+year,surname,points,Rating,Skill
+2023,Verstappen,521,"trueskill.Rating(mu=41.061, sigma=3.777)",29.72917575
+2023,Pérez,258,"trueskill.Rating(mu=36.504, sigma=3.280)",26.66467798
+2023,Hamilton,213,"trueskill.Rating(mu=32.592, sigma=2.946)",23.75397564
+2023,Alonso,197,"trueskill.Rating(mu=29.226, sigma=2.710)",21.09527281
+2023,Leclerc,185,"trueskill.Rating(mu=26.331, sigma=2.540)",18.71018343
+2023,Norris,183,"trueskill.Rating(mu=23.830, sigma=2.417)",16.57990532
+2023,Sainz,178,"trueskill.Rating(mu=21.650, sigma=2.326)",14.6710312
+2023,Russell,156,"trueskill.Rating(mu=19.728, sigma=2.260)",12.94857665
+2023,Piastri,81,"trueskill.Rating(mu=18.013, sigma=2.211)",11.38108318
+2023,Stroll,68,"trueskill.Rating(mu=16.466, sigma=2.175)",9.941943807
+2023,Ocon,56,"trueskill.Rating(mu=15.055, sigma=2.149)",8.609215764
+2023,Gasly,54,"trueskill.Rating(mu=13.755, sigma=2.130)",7.364948942
+2023,Albon,25,"trueskill.Rating(mu=12.548, sigma=2.118)",6.194446348
+2023,Tsunoda,13,"trueskill.Rating(mu=11.417, sigma=2.110)",5.085602891
+2023,Bottas,10,"trueskill.Rating(mu=10.349, sigma=2.107)",4.02835808
+2023,Hülkenberg,6,"trueskill.Rating(mu=9.336, sigma=2.107)",3.014258418
+2023,Ricciardo,6,"trueskill.Rating(mu=8.367, sigma=2.110)",2.036111975
+2023,Zhou,6,"trueskill.Rating(mu=7.436, sigma=2.116)",1.08771637
+2023,Magnussen,3,"trueskill.Rating(mu=6.537, sigma=2.124)",0.163643605
+2023,Lawson,2,"trueskill.Rating(mu=5.664, sigma=2.135)",-0.740931754

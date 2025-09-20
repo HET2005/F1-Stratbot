@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid d-flex flex-column align-items-center justify-content-center py-5">
+  <h2 class="display-5 fw-bold text-uppercase mb-4" style="letter-spacing: 1px;">Race Outcome Predictor</h2>
+
+  <form method="POST" action="/predictor" class="glass-form p-4 rounded shadow-lg">
+    <div class="mb-4">
+      <label for="team" class="form-label fw-semibold">🏎️ Select Team</label>
+      <select class="form-select glass-select" name="team" id="team" required>
+        <option value="">-- Choose Team --</option>
+        <option value="Red Bull">Red Bull</option>
+        <option value="Ferrari">Ferrari</option>
+        <option value="Mercedes">Mercedes</option>
+        <option value="McLaren">McLaren</option>
+        <option value="Aston Martin">Aston Martin</option>
+        <option value="Alpine">Alpine</option>
+        <option value="AlphaTauri">AlphaTauri</option>
+        <option value="Williams">Williams</option>
+        <option value="Alfa Romeo">Alfa Romeo</option>
+        <option value="Haas">Haas</option>
+      </select>
+    </div>
+
+    <div class="mb-4">
+      <label for="track" class="form-label fw-semibold">🛣️ Select Track</label>
+      <select class="form-select glass-select" name="track" id="track" required>
+        <option value="">-- Choose Track --</option>
+        <option value="Silverstone">Silverstone</option>
+        <option value="Monaco">Monaco</option>
+        <option value="Spa">Spa</option>
+        <option value="Monza">Monza</option>
+        <option value="Suzuka">Suzuka</option>
+        <option value="Hungaroring">Hungaroring</option>
+        <option value="Zandvoort">Zandvoort</option>
+        <option value="Yas Marina">Yas Marina</option>
+        <option value="Imola">Imola</option>
+        <option value="Barcelona">Barcelona</option>
+      </select>
+    </div>
+
+    <button type="submit" class="btn-glow w-100 mt-2">Predict Winner</button>
+  </form>
+
+  {% if result %}
+  <div class="glass-card mt-5 p-4 text-center text-white">
+    <h4 class="fw-bold">Predicted Winner: {{ result }}</h4>
+    <p>Confidence Level: <strong>{{ confidence }}%</strong></p>
+  </div>
+  {% endif %}
+</div>
+
+   
+  </form>
+
+  {% if result %}
+  <div class="card text-white bg-success mt-5 w-50 mx-auto shadow">
+  
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

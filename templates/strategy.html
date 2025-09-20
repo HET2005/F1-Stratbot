@@ -1,0 +1,208 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container py-5 text-white">
+  <h2 class="mb-4 display-6 fw-bold text-uppercase text-center">Race Strategy Planner</h2>
+
+  <form method="POST" class="glass-table p-4 rounded shadow-lg">
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <label for="team" class="form-label">Team</label>
+        <select class="form-select" name="team" id="team" required onchange="updateDrivers()">
+          <option disabled selected value>-- Select Team --</option>
+          {% for team in teams %}
+          <option value="{{ team }}">{{ team }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-4">
+        <label for="driver" class="form-label">Driver</label>
+        <select class="form-select" name="driver" id="driver" required>
+          <option disabled selected value>-- Select Driver --</option>
+        </select>
+      </div>
+      <div class="col-md-4">
+        <label for="track" class="form-label">Track</label>
+        <select class="form-select" name="track" id="track" required>
+          <option disabled selected value>-- Select Track --</option>
+          <option value="Silverstone">Silverstone</option>
+          <option value="Monaco">Monaco</option>
+          <option value="Spa">Spa</option>
+          <option value="Monza">Monza</option>
+          <option value="Suzuka">Suzuka</option>
+          <option value="Hungaroring">Hungaroring</option>
+          <option value="Zandvoort">Zandvoort</option>
+          <option value="Yas Marina">Yas Marina</option>
+          <option value="Imola">Imola</option>
+          <option value="Barcelona">Barcelona</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Aerodynamics Setup</label>
+      <select name="aero" class="form-select" required>
+        <option disabled selected value>-- Select Setup --</option>
+        <option value="High">High Downforce</option>
+        <option value="Balanced">Balanced</option>
+        <option value="Low">Low Downforce</option>
+      </select>
+    </div>
+
+    <hr class="text-light my-4">
+
+    <h5 class="mb-3 text-uppercase">Tyre Strategy</h5>
+
+    {% for i in range(1, 3+1) %}
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label class="form-label">Tyre {{ i }}</label>
+        <select name="tyre{{ i }}" class="form-select" required>
+          <option disabled selected value>-- Select Tyre --</option>
+          <option value="Soft">Soft</option>
+          <option value="Medium">Medium</option>
+          <option value="Hard">Hard</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Pit Lap</label>
+        <input type="number" name="lap{{ i }}" class="form-control" placeholder="e.g. 12" required>
+      </div>
+    </div>
+    {% endfor %}
+
+    <div class="text-center mt-4">
+      <button type="submit" class="btn btn-danger px-4 py-2 fw-bold">Simulate Strategy</button>
+    </div>
+  </form>
+
+  {% if result %}
+  
+
+  <div class="row text-center mt-5">
+    <div class="col-md-3">
+      <div class="card bg-dark text-white shadow p-3">
+        <h6>Total Race Time</h6>
+        <h3>{{ result }}</h3>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card bg-dark text-white shadow p-3">
+        <h6>Fastest Lap</h6>
+        <h3>{{ fastest_lap }} s</h3>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card bg-dark text-white shadow p-3">
+        <h6>Driver</h6>
+        <h3>{{ selected_driver }}</h3>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card bg-dark text-white shadow p-3">
+        <h6>Track</h6>
+        <h3>{{ selected_track }}</h3>
+      </div>
+    </div>
+  </div>
+
+
+  {% if df_results %}
+  <div class="table-responsive mt-5">
+    <table class="table table-dark table-striped table-hover">
+      <thead>
+        <tr>
+          <th>Lap</th>
+          <th>Stint</th>
+          <th>Tyre</th>
+          <th>Lap Time (s)</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in df_results %}
+        <tr>
+          <td>{{ row.lap }}</td>
+          <td>{{ row.stint }}</td>
+          <td>{{ row.tyre }}</td>
+          <td>{{ row.lap_time | round(2) }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+
+  <!-- Charts -->
+  <div class="mt-5">
+    <canvas id="lapChart"></canvas>
+    <canvas id="stintChart" class="mt-5"></canvas>
+  </div>
+  {% endif %}
+</div>
+
+<style>
+select.form-select, input.form-control {
+  backdrop-filter: blur(5px);
+  transition: all 0.3s ease;
+  border-radius: 10px;
+  padding: 10px;
+  color: white;
+  background-color: rgba(0,0,0,0.5);
+  border: 1px solid rgba(255,255,255,0.2);
+}
+.card {
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+.card h3 {
+  font-weight: bold;
+}
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const driverMap = {{ drivers|tojson }};
+function updateDrivers() {
+  const team = document.getElementById("team").value;
+  const driverSelect = document.getElementById("driver");
+  driverSelect.innerHTML = '<option disabled selected value>-- Select Driver --</option>';
+  if (driverMap[team]) {
+    driverMap[team].forEach(driver => {
+      const option = document.createElement("option");
+      option.value = driver;
+      option.text = driver;
+      driverSelect.appendChild(option);
+    });
+  }
+}
+
+// Lap Time Line Chart
+{% if df_results %}
+const lapCtx = document.getElementById('lapChart').getContext('2d');
+new Chart(lapCtx, {
+  type: 'line',
+  data: {
+    labels: {{ df_results | map(attribute='lap') | list | tojson }},
+    datasets: [{
+      label: 'Lap Time (s)',
+      data: {{ df_results | map(attribute='lap_time') | list | tojson }},
+      borderColor: 'rgba(255, 99, 132, 1)',
+      backgroundColor: 'rgba(255, 99, 132, 0.2)',
+      fill: true,
+      tension: 0.2
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { labels: { color: "white" } } },
+    scales: {
+      x: { ticks: { color: "white" } },
+      y: { ticks: { color: "white" } }
+    }
+  }
+});
+
+{% endif %}
+</script>
+
+{% endblock %}

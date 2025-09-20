@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>F1 StratBot Intro</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      background-color: black;
+      margin: 0;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      opacity: 1;
+      transition: opacity 1s ease-in-out;
+    }
+
+    .logo {
+      width: 300px;
+      opacity: 0;
+      animation: zoomFade 1s ease-out forwards;
+    }
+
+    @keyframes zoomFade {
+      0% {
+        transform: scale(0.2);
+        opacity: 0;
+      }
+  
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- F1 Logo -->
+  <img src="{{ url_for('static', filename='images/f1-logo.png') }}" class="logo" alt="F1 Logo">
+  <audio><source src="{{ url_for('static', filename='videos/f1-sound.mp3') }}"></audio>
+  
+
+  <script>
+    const audio = document.getElementById("f1-audio");
+
+    // try playing the sound (some browsers block it until user interacts)
+    setTimeout(() => {
+      audio.muted = false;
+      audio.play().catch(() => {
+        document.body.addEventListener("click", () => {
+          audio.play();
+        }, { once: true });
+      });
+    }, 150);
+
+    // fade out and redirect
+    setTimeout(() => {
+      document.body.style.opacity = 0;
+      setTimeout(() => {
+        window.location.href = "/home";
+      }, 1000);  // fade duration
+    }, 3500);  // total intro duration
+  </script>
+
+</body>
+</html>
